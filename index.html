@@ -2,375 +2,232 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Scam Awareness Simulator — Fake Winning Message</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sample Notification</title>
 <style>
-  :root {
-    --bg: #0b1120;
-    --card: #111827;
-    --text: #e5e7eb;
-    --muted: #9ca3af;
-    --red: #f87171;
-    --red-dark: #7f1d1d;
-    --amber: #fbbf24;
-    --green: #34d399;
-    --border: #1f2937;
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
   }
-
-  * { box-sizing: border-box; }
 
   body {
-    margin: 0;
-    font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-    background: radial-gradient(circle at top, #1e293b, var(--bg));
-    color: var(--text);
     min-height: 100vh;
-    padding: 24px;
-  }
-
-  .warning-banner {
-    max-width: 1100px;
-    margin: 0 auto 24px;
-    background: linear-gradient(90deg, var(--red-dark), #991b1b);
-    border: 1px solid var(--red);
-    border-radius: 12px;
-    padding: 16px 20px;
-    font-weight: 600;
-    display: flex;
-    gap: 12px;
-    align-items: center;
-  }
-
-  .warning-banner span { font-size: 1.4rem; }
-
-  .layout {
-    max-width: 1100px;
-    margin: 0 auto;
     display: grid;
-    grid-template-columns: 1.2fr 0.8fr;
-    gap: 24px;
+    place-items: center;
+    padding: 24px;
+    font-family: Arial, Helvetica, sans-serif;
+    background: radial-gradient(circle at top left, #1e3a8a, #0f172a 60%);
+    color: #0f172a;
   }
 
-  @media (max-width: 900px) {
-    .layout { grid-template-columns: 1fr; }
-  }
-
-  .phone {
+  .notice-card {
     position: relative;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 24px;
-    padding: 20px;
+    width: min(760px, 100%);
+    background: #ffffff;
+    border-radius: 18px;
     overflow: hidden;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.35);
+    animation: rise 0.7s ease-out;
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(18px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
   }
 
   .watermark {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) rotate(-28deg);
-    font-size: clamp(2rem, 6vw, 4rem);
+    inset: 0;
+    display: grid;
+    place-items: center;
+    font-size: clamp(2rem, 10vw, 6rem);
     font-weight: 900;
-    color: rgba(248, 113, 113, 0.12);
+    color: rgba(220, 38, 38, 0.08);
+    transform: rotate(-24deg);
     pointer-events: none;
-    white-space: nowrap;
-    letter-spacing: 0.1em;
-    z-index: 0;
-  }
-
-  .phone-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 12px;
-    margin-bottom: 16px;
-    position: relative;
-    z-index: 1;
-  }
-
-  .phone-header h2 {
-    margin: 0;
-    font-size: 1rem;
-    color: var(--muted);
-    font-weight: 600;
-  }
-
-  .tag {
-    background: var(--red-dark);
-    color: #fecaca;
-    border: 1px solid var(--red);
-    padding: 4px 10px;
-    border-radius: 999px;
-    font-size: 0.75rem;
-    font-weight: 700;
-  }
-
-  .message {
-    position: relative;
-    z-index: 1;
-    line-height: 1.7;
-    font-size: 0.98rem;
-  }
-
-  .message p { margin: 0 0 14px; }
-
-  .red-flag {
-    border-bottom: 2px dashed var(--red);
-    cursor: help;
-    transition: background 0.2s, border-color 0.2s;
-    padding: 1px 2px;
-    border-radius: 4px;
-  }
-
-  .red-flag:hover,
-  .red-flag.active {
-    background: rgba(248, 113, 113, 0.15);
-  }
-
-  body.indicators-off .red-flag {
-    border-bottom: none;
-    background: none;
-    cursor: default;
-  }
-
-  .panel {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 24px;
-    padding: 20px;
-  }
-
-  .panel h2 {
-    margin-top: 0;
-    font-size: 1.1rem;
-  }
-
-  .panel ul {
-    padding-left: 20px;
-    color: var(--muted);
-    line-height: 1.6;
-  }
-
-  .panel li { margin-bottom: 8px; }
-
-  .btn {
-    background: #1f2937;
-    color: var(--text);
-    border: 1px solid #374151;
-    padding: 10px 16px;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: 0.2s;
-    margin: 4px 4px 4px 0;
-  }
-
-  .btn:hover { background: #374151; }
-
-  .explanation {
-    margin-top: 16px;
-    background: #0f172a;
-    border-left: 4px solid var(--amber);
-    padding: 12px 14px;
-    border-radius: 8px;
-    min-height: 60px;
-    color: #fde68a;
-    font-size: 0.95rem;
-    max-height: 320px;
-    overflow-y: auto;
-  }
-
-  .explanation ul {
-    margin: 8px 0 0;
-    padding-left: 18px;
-    color: #fde68a;
-  }
-
-  .quiz {
-    grid-column: 1 / -1;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 24px;
-    padding: 20px;
-  }
-
-  .quiz h2 { margin-top: 0; }
-
-  .quiz-options {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 12px;
-  }
-
-  .quiz-option {
-    flex: 1 1 220px;
-    text-align: left;
-    background: #1f2937;
-    color: var(--text);
-    border: 1px solid #374151;
-    padding: 14px;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: 0.2s;
-  }
-
-  .quiz-option:hover { background: #374151; }
-
-  .quiz-option.correct {
-    background: #064e3b;
-    border-color: var(--green);
-    color: #d1fae5;
-  }
-
-  .quiz-option.wrong {
-    background: #7f1d1d;
-    border-color: var(--red);
-    color: #fecaca;
-  }
-
-  .result {
-    margin-top: 14px;
-    font-weight: 600;
-    min-height: 24px;
-  }
-
-  .footer-note {
-    max-width: 1100px;
-    margin: 24px auto 0;
-    color: var(--muted);
-    font-size: 0.85rem;
+    user-select: none;
+    letter-spacing: 4px;
     text-align: center;
+    z-index: 1;
+  }
+
+  .banner {
+    position: relative;
+    z-index: 2;
+    background: #facc15;
+    color: #111827;
+    text-align: center;
+    padding: 12px 16px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.85rem;
+  }
+
+  .content {
+    position: relative;
+    z-index: 2;
+    padding: 32px;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+    margin-bottom: 18px;
+    color: #1e3a8a;
+  }
+
+  #typed {
+    min-height: 260px;
+    white-space: pre-wrap;
+    line-height: 1.7;
+    font-size: 1rem;
+    color: #1f2937;
+    border-left: 4px solid #1e3a8a;
+    padding-left: 18px;
+  }
+
+  .cursor {
+    display: inline-block;
+    width: 9px;
+    height: 1.1em;
+    background: #1e3a8a;
+    margin-left: 2px;
+    vertical-align: -2px;
+    animation: blink 0.8s steps(1) infinite;
+  }
+
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  .actions {
+    margin-top: 28px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  button {
+    border: none;
+    border-radius: 999px;
+    padding: 12px 18px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s ease;
+  }
+
+  .copy-btn {
+    background: #1e3a8a;
+    color: white;
+  }
+
+  .copy-btn:hover {
+    background: #172554;
+    transform: translateY(-2px);
+  }
+
+  .print-btn {
+    background: #e5e7eb;
+    color: #111827;
+  }
+
+  .print-btn:hover {
+    background: #d1d5db;
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 520px) {
+    .content {
+      padding: 22px;
+    }
+
+    #typed {
+      font-size: 0.95rem;
+      padding-left: 14px;
+    }
+  }
+
+  @media print {
+    body {
+      background: white;
+      padding: 0;
+    }
+
+    .actions,
+    .banner {
+      display: none;
+    }
+
+    .notice-card {
+      box-shadow: none;
+      border-radius: 0;
+    }
+
+    .watermark {
+      color: rgba(220, 38, 38, 0.12);
+    }
   }
 </style>
 </head>
 <body>
 
-  <div class="warning-banner">
-    <span>⚠️</span>
-    <div>
-      <strong>EDUCATIONAL SIMULATION ONLY.</strong>
-      This is a fake scam sample used to teach recognition. Do not send, copy, or act on it.
-      Real prizes never require an upfront “releasing fee” or mobile-money payment.
+  <main class="notice-card">
+    <div class="watermark">SAMPLE ONLY</div>
+    <div class="banner">Sample — Not a real prize notification</div>
+
+    <div class="content">
+      <h1>Sample Notification</h1>
+      <div id="typed"><span class="cursor"></span></div>
+
+      <div class="actions">
+        <button class="copy-btn" onclick="copyText()">Copy text</button>
+        <button class="print-btn" onclick="window.print()">Print</button>
+      </div>
     </div>
-  </div>
-
-  <div class="layout">
-    <section class="phone">
-      <div class="watermark">SIMULATED SCAM</div>
-      <div class="phone-header">
-        <h2>Sample Message</h2>
-        <span class="tag">FAKE</span>
-      </div>
-      <div class="message" id="message">
-        <p><span class="red-flag" data-explanation="Unsolicited prize claim. You cannot win a draw you never entered.">Congratulations Mr. [REDACTED]</span> your successful win of <span class="red-flag" data-explanation="A large, round-number prize is used to excite the victim and lower suspicion.">UGX 1,943,410</span> 🎉. Your winning has already been confirmed and secured under your name.</p>
-
-        <p>As per the <span class="red-flag" data-explanation="False authority. Scammers invent official-sounding rules to make the fee seem legitimate.">international betting regulations</span>, every winning above UGX 1,000,000 requires a <span class="red-flag" data-explanation="Advance-fee fraud. The core trick is asking for a small payment to release a larger sum that does not exist.">Releasing Fee of UGX 186,200</span> before funds can be transferred to your account. This is a standard procedure put in place to ensure smooth processing and avoid any delays or restrictions.</p>
-
-        <p>📌 Once the <span class="red-flag" data-explanation="The fee is the actual goal. The promised winnings are bait.">UGX 186,200 Releasing Fee</span> is cleared, your total winning of UGX 1,943,410 will be automatically sent to your <span class="red-flag" data-explanation="Mobile money is irreversible and hard to trace. Scammers prefer it for this reason.">MTN account</span> without further delays.</p>
-
-        <p>I appreciate your patience and trust throughout this process. <span class="red-flag" data-explanation="Urgency and emotional pressure: 'final step', 'instantly'. This discourages the victim from checking with others.">This is the final step</span>, and once completed, you will enjoy your full earnings instantly.</p>
-
-        <p>Would you like me to provide you with the <span class="red-flag" data-explanation="The scammer wants to move the conversation to payment details and keep the victim isolated from advice.">official payment details now</span> so you can clear the Releasing Fee and receive your winnings?</p>
-      </div>
-    </section>
-
-    <aside class="panel">
-      <h2>Scam Anatomy</h2>
-      <ul>
-        <li><strong>Hook:</strong> Unexpected congratulations</li>
-        <li><strong>False authority:</strong> “international betting regulations”</li>
-        <li><strong>Upfront fee:</strong> “Releasing Fee”</li>
-        <li><strong>Payment rail:</strong> MTN Mobile Money</li>
-        <li><strong>Urgency:</strong> “final step”, “instantly”</li>
-        <li><strong>Isolation:</strong> “official payment details now”</li>
-      </ul>
-      <button class="btn" id="toggleIndicators">Hide indicators</button>
-      <button class="btn" id="showAllFlags">Show all explanations</button>
-      <div class="explanation" id="explanation">
-        Click any dashed red phrase in the message to see why it is a red flag.
-      </div>
-    </aside>
-
-    <section class="quiz">
-      <h2>Quick Quiz: What should you do?</h2>
-      <p>You receive this message. What is the safest action?</p>
-      <div class="quiz-options">
-        <button class="quiz-option" data-correct="false">Pay the UGX 186,200 Releasing Fee quickly.</button>
-        <button class="quiz-option" data-correct="false">Send your MTN mobile money PIN to confirm your account.</button>
-        <button class="quiz-option" data-correct="true">Do not pay. Block the sender, report it, and warn others.</button>
-        <button class="quiz-option" data-correct="false">Ask for more time to raise the fee.</button>
-      </div>
-      <div class="result" id="result"></div>
-    </section>
-  </div>
-
-  <div class="footer-note">
-    Educational sample only. If you receive a real message like this, report it to your local cybercrime unit and telecom regulator.
-    In Uganda, you can contact the Uganda Police Cyber Crime Unit or the Uganda Communications Commission.
-  </div>
+  </main>
 
 <script>
-  const flags = document.querySelectorAll('.red-flag');
-  const explanation = document.getElementById('explanation');
-  const toggleBtn = document.getElementById('toggleIndicators');
-  const showAllBtn = document.getElementById('showAllFlags');
-  const quizOptions = document.querySelectorAll('.quiz-option');
-  const result = document.getElementById('result');
+  const message = `Dear {{NAME}},
 
-  flags.forEach(flag => {
-    flag.addEventListener('click', () => {
-      if (document.body.classList.contains('indicators-off')) return;
-      explanation.innerHTML = `<strong>Red flag:</strong> ${flag.dataset.explanation}`;
-    });
-  });
+This is a clearly marked sample notification. It is not a real prize, lottery, or winning claim.
 
-  toggleBtn.addEventListener('click', () => {
-    document.body.classList.toggle('indicators-off');
-    const off = document.body.classList.contains('indicators-off');
-    toggleBtn.textContent = off ? 'Show indicators' : 'Hide indicators';
-    if (off) {
-      explanation.textContent = 'Indicators hidden. Toggle them back on to inspect the red flags.';
-    } else {
-      explanation.textContent = 'Click any dashed red phrase in the message to see why it is a red flag.';
+In this demo, a record of UGX {{AMOUNT}} is shown for illustration only. No real funds are owed, pending, or available.
+
+If this were a legitimate notification, it would include verifiable contact details, official terms, and no urgent demand for fees or personal information.
+
+Thank you.`;
+
+  const target = document.getElementById("typed");
+  const cursor = document.querySelector(".cursor");
+  let index = 0;
+
+  function typeWriter() {
+    if (index < message.length) {
+      cursor.insertAdjacentText("beforebegin", message.charAt(index));
+      index++;
+      setTimeout(typeWriter, 18);
     }
-  });
+  }
 
-  showAllBtn.addEventListener('click', () => {
-    let html = '<strong>All red flags in this sample:</strong><ul>';
-    flags.forEach(flag => {
-      html += `<li><em>${flag.textContent}</em> — ${flag.dataset.explanation}</li>`;
+  typeWriter();
+
+  function copyText() {
+    navigator.clipboard.writeText(message).then(() => {
+      alert("Sample text copied.");
+    }).catch(() => {
+      alert("Copy failed. Please select the text manually.");
     });
-    html += '</ul>';
-    explanation.innerHTML = html;
-    flags.forEach(flag => flag.classList.add('active'));
-  });
-
-  quizOptions.forEach(option => {
-    option.addEventListener('click', () => {
-      quizOptions.forEach(o => {
-        o.classList.remove('correct', 'wrong');
-        o.disabled = true;
-      });
-
-      const isCorrect = option.dataset.correct === 'true';
-      option.classList.add(isCorrect ? 'correct' : 'wrong');
-
-      if (isCorrect) {
-        result.textContent = '✅ Correct. Never pay an upfront fee to release “winnings.” Report and block.';
-        result.style.color = 'var(--green)';
-      } else {
-        result.textContent = '❌ Not safe. This is exactly what the scam wants you to do.';
-        result.style.color = 'var(--red)';
-      }
-
-      if (!isCorrect) {
-        document.querySelector('.quiz-option[data-correct="true"]').classList.add('correct');
-      }
-    });
-  });
+  }
 </script>
+
 </body>
-  </html>
+</html>
